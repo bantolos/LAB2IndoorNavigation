@@ -19,7 +19,7 @@ public class SetNavigationTarget : MonoBehaviour {
 
     private int currentFloor = 1;
 
-    private bool lineToggle = false;
+    private bool lineToggle = true;
 
     private void Start() {
         path = new NavMeshPath();
