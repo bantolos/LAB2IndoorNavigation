@@ -9,20 +9,20 @@ public class EnvironmentRotation : MonoBehaviour
     NavMeshSurface navMeshSurface;
     public Transform Environment;
     public Quaternion startQuaternion;
-    void start()
+    void Start()
     {
         NavMeshBake();
     }
     public void rotateLeft()
     {
-        Vector3 rotationToAdd = new Vector3(0, 2.5f, 0);
+        Vector3 rotationToAdd = new Vector3(0, 1f, 0);
         Environment.Rotate(rotationToAdd);
         NavMeshBake();
     }
 
     public void rotateRight()
     {
-        Vector3 rotationToAdd = new Vector3(0, -2.5f, 0);
+        Vector3 rotationToAdd = new Vector3(0, -1f, 0);
         Environment.Rotate(rotationToAdd);
         NavMeshBake();
     }

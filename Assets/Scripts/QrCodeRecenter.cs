@@ -28,33 +28,40 @@ public class QrCodeRecenter : MonoBehaviour
     private IBarcodeReader reader = new BarcodeReader();
     void Start()
     {
-
+        SetQrCodeRecenterTarget("PintuMasuk");
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             SetQrCodeRecenterTarget("LivingRoom");
             showApplicationCanvas();
         }
     }
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         cameraManager.frameReceived += OnCameraFrameReceived;
     }
 
-    private void onDisable() {
+    private void onDisable()
+    {
         cameraManager.frameReceived -= OnCameraFrameReceived;
     }
 
-    private void OnCameraFrameReceived(ARCameraFrameEventArgs eventArgs) { 
-        if(!ApplicationCanvas.activeSelf) {
-            if(!cameraManager.TryAcquireLatestCpuImage(out XRCpuImage image)) {
+    private void OnCameraFrameReceived(ARCameraFrameEventArgs eventArgs)
+    {
+        if (!ApplicationCanvas.activeSelf)
+        {
+            if (!cameraManager.TryAcquireLatestCpuImage(out XRCpuImage image))
+            {
                 return;
             }
 
-            var conversionParams = new XRCpuImage.ConversionParams {
+            var conversionParams = new XRCpuImage.ConversionParams
+            {
                 // Get the entire image.
                 inputRect = new RectInt(0, 0, image.width, image.height),
 
@@ -102,23 +109,27 @@ public class QrCodeRecenter : MonoBehaviour
             var result = reader.Decode(cameraImageTexture.GetPixels32(), cameraImageTexture.width, cameraImageTexture.height);
 
             // Do something with the result
-            if(result != null) {
+            if (result != null)
+            {
                 SetQrCodeRecenterTarget(result.Text);
                 showApplicationCanvas();
             }
         }
     }
 
-    private void showApplicationCanvas() {
+    private void showApplicationCanvas()
+    {
         ApplicationCanvas.SetActive(true);
         applicationCanvasIsActive = true;
         IntroCanvas.SetActive(false);
         introCanvasIsActive = false;
     }
 
-    private void SetQrCodeRecenterTarget(string targetText) { 
+    private void SetQrCodeRecenterTarget(string targetText)
+    {
         Target currentTarget = navigationTargetObjects.Find(x => x.Name.ToLower().Equals(targetText.ToLower()));
-        if(currentTarget != null) {
+        if (currentTarget != null)
+        {
             // Reset position and rotation of ARSession
             session.Reset();
 
