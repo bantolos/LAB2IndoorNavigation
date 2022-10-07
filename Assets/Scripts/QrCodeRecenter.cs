@@ -16,14 +16,12 @@ public class QrCodeRecenter : MonoBehaviour
     private ARCameraManager cameraManager;
     [SerializeField]
     private List<Target> navigationTargetObjects = new List<Target>();
+    [SerializeField]
+    private GameObject TweenUI;
 
-    public bool qrCodeRecenterIsActive = false;
-    public GameObject ApplicationCanvas;
-    public bool applicationCanvasIsActive = false;
+    UITween tweenUI;
 
-    public GameObject IntroCanvas;
-    public bool introCanvasIsActive = true;
-
+    public bool qrCodeRecenterIsActive = true;
     private Texture2D cameraImageTexture;
     private IBarcodeReader reader = new BarcodeReader();
     void Start()
@@ -34,10 +32,11 @@ public class QrCodeRecenter : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.V))
         {
-            SetQrCodeRecenterTarget("LivingRoom");
-            showApplicationCanvas();
+            SetQrCodeRecenterTarget("PintuMasuk");
+            Debug.Log("udah klik spasiii");
+            changeCanvas();
         }
     }
 
@@ -53,7 +52,7 @@ public class QrCodeRecenter : MonoBehaviour
 
     private void OnCameraFrameReceived(ARCameraFrameEventArgs eventArgs)
     {
-        if (!ApplicationCanvas.activeSelf)
+        if (qrCodeRecenterIsActive)
         {
             if (!cameraManager.TryAcquireLatestCpuImage(out XRCpuImage image))
             {
@@ -112,17 +111,36 @@ public class QrCodeRecenter : MonoBehaviour
             if (result != null)
             {
                 SetQrCodeRecenterTarget(result.Text);
-                showApplicationCanvas();
+                changeCanvas();
             }
         }
     }
 
-    private void showApplicationCanvas()
+    public void scanQRCode()
     {
-        ApplicationCanvas.SetActive(true);
-        applicationCanvasIsActive = true;
-        IntroCanvas.SetActive(false);
-        introCanvasIsActive = false;
+        qrCodeRecenterIsActive = true;
+        Debug.Log("udah klik qrcode " + qrCodeRecenterIsActive);
+
+        changeCanvas();
+    }
+
+    private void changeCanvas()
+    {
+        Debug.Log("terpanggil");
+        tweenUI = GameObject.FindGameObjectWithTag("UIAnimation").GetComponent<UITween>();
+        if (qrCodeRecenterIsActive)
+        {
+            tweenUI.showApplication();
+            qrCodeRecenterIsActive = false;
+            Debug.Log("terpanggil2");
+        }
+        else
+        {
+            tweenUI.showIntro();
+            qrCodeRecenterIsActive = true;
+            Debug.Log("terpanggil3");
+        }
+
     }
 
     private void SetQrCodeRecenterTarget(string targetText)
@@ -131,7 +149,7 @@ public class QrCodeRecenter : MonoBehaviour
         if (currentTarget != null)
         {
             // Reset position and rotation of ARSession
-            session.Reset();
+            // session.Reset();
 
             // Add offset for recentering
             sessionOrigin.transform.position = currentTarget.PositionObject.transform.position;

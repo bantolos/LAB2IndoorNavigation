@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class EnvironmentRotation : MonoBehaviour
 {
     [SerializeField]
-    NavMeshSurface navMeshSurface;
+    NavMeshSurface[] navMeshSurface;
     public Transform Environment;
     public Quaternion startQuaternion;
     void Start()
@@ -17,18 +17,22 @@ public class EnvironmentRotation : MonoBehaviour
     {
         Vector3 rotationToAdd = new Vector3(0, 1f, 0);
         Environment.Rotate(rotationToAdd);
-        NavMeshBake();
+        // NavMeshBake();
     }
 
     public void rotateRight()
     {
         Vector3 rotationToAdd = new Vector3(0, -1f, 0);
         Environment.Rotate(rotationToAdd);
-        NavMeshBake();
+        // NavMeshBake();
     }
 
     public void NavMeshBake()
     {
-        navMeshSurface.BuildNavMesh();
+        for (int i = 0; i < navMeshSurface.Length; i++)
+        {
+            navMeshSurface[i].BuildNavMesh();
+        }
+        // navMeshSurface.BuildNavMesh();
     }
 }
