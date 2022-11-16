@@ -27,6 +27,7 @@ public class QrCodeRecenter : MonoBehaviour
     void Start()
     {
         SetQrCodeRecenterTarget("PintuMasuk");
+        testing();
     }
 
     // Update is called once per frame
@@ -38,6 +39,19 @@ public class QrCodeRecenter : MonoBehaviour
             Debug.Log("udah klik spasiii");
             changeCanvas();
         }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            SetQrCodeRecenterTarget("Lantai3");
+            Debug.Log("udah ke lantai 3");
+            changeCanvas();
+        }
+    }
+
+    private void testing()
+    {
+        SetQrCodeRecenterTarget("PintuMasuk");
+        Debug.Log("udah klik spasiii");
+        changeCanvas();
     }
 
     private void OnEnable()
